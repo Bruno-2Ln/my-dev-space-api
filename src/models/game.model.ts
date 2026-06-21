@@ -1,0 +1,1 @@
+export type GameType = 'snake' | 'pong' | 'breakout' | 'flappy' | 'tetris' | 'memory' | '2048';
