@@ -89,9 +89,6 @@ describe('ScoresService', () => {
             );
 
             const newScore = await ScoresService.save('Bruno', 150);
-
-            console.log(newScore)
-
             expect(newScore).toHaveProperty('gameName', 'snake');
             expect(prisma.score.create).toHaveBeenCalledWith({
                 data: {

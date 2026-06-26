@@ -48,11 +48,17 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "roots": ["<rootDir>/src"],
-    "testMatch": ["**/*.spec.ts"],
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "testMatch": [
+      "**/*.spec.ts"
+    ],
     "transform": {
       "^.+\\.tsx?$": "@swc/jest"
     },
-    "setupFiles": ["<rootDir>/jest.setup.ts"]
+    "setupFiles": [
+      "<rootDir>/jest.setup.ts"
+    ]
   }
 }
