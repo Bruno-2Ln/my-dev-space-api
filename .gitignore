@@ -3,3 +3,17 @@ node_modules
 .env
 
 /src/generated/prisma
+
+# Build
+dist/
+out-tsc/
+
+# Cookies de test (créés par nos commandes curl)
+cookies.txt
+
+# Logs
+*.log
+
+# OS / IDE
+.DS_Store
+.idea/

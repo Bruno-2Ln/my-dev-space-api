@@ -19,3 +19,15 @@ model Score {
   gameName   String   @default("snake")
   createdAt  DateTime @default(now())
 }
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+ADMIN
+}

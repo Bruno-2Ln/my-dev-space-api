@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { ScoresService } from '../services/scores.service';
+import { ScoresService } from './scores.service';
 
 
 
@@ -48,5 +48,18 @@ export const saveScore = async (
         res.status(201).json(await ScoresService.save(playerName, score, gameName ?? 'snake'));
     } catch (err) {
         next(err);
+    }
+};
+
+export const deleteScore = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const id = Number(req.params.id);
+        res.status(200).json(await ScoresService.deleteById(id));
+    } catch (err) {
+        res.status(404).json({ message: 'score not existing' });
     }
 };

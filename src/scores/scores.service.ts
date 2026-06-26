@@ -30,4 +30,10 @@ export const ScoresService = {
         });
     },
 
+    deleteById(id: number): Promise<Score> {
+        return prisma.score.delete({
+            where: { id },
+        });
+    },
+
 };

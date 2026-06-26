@@ -9,6 +9,7 @@ jest.mock('../db/prisma.client', () => ({
         score: {
             findMany: jest.fn(),
             create: jest.fn(),
+            delete: jest.fn(),
         }
     }
 }));
@@ -32,6 +33,22 @@ describe('ScoresService', () => {
             // Assert — on vérifie
             expect(scores).toHaveLength(2);
             expect(prisma.score.findMany).toHaveBeenCalledWith({
+                orderBy: { score: 'desc' },
+                take: 10,
+            });
+        });
+
+        it('should return scores sorted by score desc with game name', async () => {
+            (prisma.score.findMany as jest.Mock).mockResolvedValue([
+                { id: 1, playerName: 'Bruno', score: 150, gameName: 'snake', createdAt: new Date() },
+                { id: 2, playerName: 'Alice', score: 100, gameName: 'snake', createdAt: new Date() },
+            ]);
+
+            const scores = await ScoresService.getAllByGame('snake');
+
+            expect(scores).toHaveLength(2);
+            expect(prisma.score.findMany).toHaveBeenCalledWith({
+                where: { gameName: 'snake' },
                 orderBy: { score: 'desc' },
                 take: 10,
             });
@@ -86,5 +103,24 @@ describe('ScoresService', () => {
 
         });
 
+    });
+
+    it('delete score successfully', async () => {
+        (prisma.score.delete as jest.Mock).mockResolvedValue(
+            { id: 1, playerName: 'Bruno', score: 150 },
+        );
+
+        const deleteScore = await ScoresService.deleteById(1);
+
+        expect(deleteScore).toHaveProperty('id', 1);
+        expect(prisma.score.delete).toHaveBeenCalledWith({
+           where: { id: 1 },
+        });
+    })
+
+    it('should throw an error when score does not exist', async () => {
+        (prisma.score.delete as jest.Mock).mockRejectedValue(new Error('Record not found'));
+
+        await expect(ScoresService.deleteById(999)).rejects.toThrow('Record not found');
     });
 });
