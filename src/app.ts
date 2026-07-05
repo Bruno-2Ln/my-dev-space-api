@@ -5,6 +5,7 @@ import { scoresRouter } from './scores/scores.routes';
 import { errorMiddleware } from './middleware/error.middleware';
 import cookieParser from "cookie-parser";
 import {authRouter} from "./auth/auth.routes";
+import {projectsRouter} from "./projects/projects.routes";
 import helmet from 'helmet';
 
 dotenv.config();
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/api/auth', authRouter);
 app.use('/api/scores', scoresRouter);
+app.use('/api/projects', projectsRouter);
 
 app.use((_req: Request, res: Response) => {
     res.status(404).json({ message: 'Route not found' });

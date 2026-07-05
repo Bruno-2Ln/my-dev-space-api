@@ -55,13 +55,10 @@ describe('ScoresService', () => {
         });
 
         it('should return empty array', async () => {
-            // Arrange — on dit ce que Prisma va retourner
             (prisma.score.findMany as jest.Mock).mockResolvedValue([]);
 
-            // Act — on appelle le service
             const scores = await ScoresService.getAll();
 
-            // Assert — on vérifie
             expect(scores).toHaveLength(0);
             expect(prisma.score.findMany).toHaveBeenCalledWith({
                 orderBy: { score: 'desc' },
