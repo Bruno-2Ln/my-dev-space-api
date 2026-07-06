@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction} from "express";
 import { ProjectsService } from './projects.service';
+import { Prisma } from '../generated/prisma';
 
 export const getProjects = async (
     _req: Request,
@@ -38,10 +39,18 @@ export const saveProject = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const { title, } = req.body;
+        const { title, description, shortDescription } = req.body;
 
         if (!title) {
             res.status(400).json({ message: 'title is required' });
+            return;
+        }
+        if (!description) {
+            res.status(400).json({ message: 'description is required' });
+            return;
+        }
+        if (!shortDescription) {
+            res.status(400).json({ message: 'shortDescription is required' });
             return;
         }
 
@@ -66,7 +75,11 @@ export const updateProject = async (
 
         res.status(200).json(await ProjectsService.updateProject(id, req.body));
     } catch (e) {
-        next(e)
+        if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
+            res.status(404).json({ message: 'project not existing' });
+            return;
+        }
+        next(e);
     }
 }
 
@@ -78,7 +91,11 @@ export const deleteProject = async (
     try {
         const id = Number(req.params.id);
         res.status(200).json(await ProjectsService.deleteProjectById(id));
-    } catch (err) {
-        res.status(404).json({ message: 'project not existing' });
+    } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2025') {
+            res.status(404).json({ message: 'project not existing' });
+            return;
+        }
+        next(e);
     }
 };

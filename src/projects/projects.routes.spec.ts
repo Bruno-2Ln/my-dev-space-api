@@ -170,6 +170,42 @@ describe('POST /projects', () => {
         expect(res.body).toHaveProperty('message', 'title is required');
     })
 
+    it('should respond with 400 with message [description is required]', async () => {
+        const res = await request(app)
+            .post('/api/projects')
+            .set('Cookie', `token=${validToken}`)
+            .send({
+                title: 'test',
+                shortDescription: 'API bancaire',
+                thumbnailUrl: null,
+                images: [],
+                stack: ['NODEJS'],
+                featured: false,
+                order: 2,
+            });
+
+        expect(res.status).toBe(400);
+        expect(res.body).toHaveProperty('message', 'description is required');
+    })
+
+    it('should respond with 400 with message [shortDescription is required]', async () => {
+        const res = await request(app)
+            .post('/api/projects')
+            .set('Cookie', `token=${validToken}`)
+            .send({
+                title: 'test',
+                description: 'Backend sécurisé Node.js',
+                thumbnailUrl: null,
+                images: [],
+                stack: ['NODEJS'],
+                featured: false,
+                order: 2,
+            });
+
+        expect(res.status).toBe(400);
+        expect(res.body).toHaveProperty('message', 'shortDescription is required');
+    })
+
     it('should call next with error when service fails', async () => {
         (prisma.project.create as jest.Mock).mockRejectedValue(new Error('DB error'));
 
