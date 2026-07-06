@@ -31,5 +31,12 @@ export const ProjectsService = {
         return prisma.project.delete({
             where: { id }
         })
+    },
+
+    getProjectById(id: number): Promise<Project> {
+        return prisma.project.findUnique({
+            where: { id }
+        })
     }
+
 }

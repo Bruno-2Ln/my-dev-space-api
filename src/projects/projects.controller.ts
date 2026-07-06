@@ -13,6 +13,25 @@ export const getProjects = async (
     }
 }
 
+export const getProjectById = async (
+    _req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const id = Number(_req.params.id);
+
+        if (isNaN(id)) {
+            res.status(400).json({ message: 'Id invalide' });
+            return;
+        }
+
+        res.status(200).json(await ProjectsService.getProjectById(id));
+    } catch (e) {
+        next(e)
+    }
+}
+
 export const saveProject = async (
     req: Request,
     res: Response,

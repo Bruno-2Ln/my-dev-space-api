@@ -1,12 +1,14 @@
 import prisma from "../db/prisma.client";
 import {ScoresService} from "../scores/scores.service";
 import {ProjectsService} from "./projects.service";
+import {mockProjects} from "./projects.mock";
 
 jest.mock('../db/prisma.client', () => ({
     __esModule: true,
     default: {
         project: {
             findMany: jest.fn(),
+            findUnique: jest.fn(),
             create: jest.fn(),
             delete: jest.fn(),
             update: jest.fn(),
@@ -15,18 +17,13 @@ jest.mock('../db/prisma.client', () => ({
 }));
 
 describe('projectsService', () => {
-    const mockProjects = [
-        { id: 1, title: 'Snake', shortDescription: 'Jeu Snake', description: 'Un jeu Snake en Angular', thumbnailUrl: null, images: [], stack: ['ANGULAR'], featured: true, order: 1, createdAt: new Date(), updatedAt: new Date() },
-        { id: 2, title: 'BFF Bancaire', shortDescription: 'API bancaire', description: 'Backend sécurisé Node.js', thumbnailUrl: null, images: [], stack: ['NODEJS'], featured: false, order: 2, createdAt: new Date(), updatedAt: new Date() },
-        { id: 3, title: 'Portfolio', shortDescription: 'Mon portfolio', description: 'Portfolio Angular + Node', thumbnailUrl: null, images: [], stack: ['ANGULAR', 'NODEJS'], featured: false, order: 1, createdAt: new Date(), updatedAt: new Date() },
-    ];
 
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
-    describe('getAll', () => {
-        it('should return projects sorted by order asc and id asc if is same order', async () => {
+
+    it('should return projects sorted by order asc and id asc if is same order', async () => {
             (prisma.project.findMany as jest.Mock).mockResolvedValue([
                 ...mockProjects
             ]);
@@ -39,7 +36,6 @@ describe('projectsService', () => {
                 ]
             });
         });
-    });
 
     it('save project successfully', async () => {
         (prisma.project.create as jest.Mock).mockResolvedValue(
@@ -50,6 +46,17 @@ describe('projectsService', () => {
 
         expect(newProject).toHaveProperty('id');
         expect(newProject).toHaveProperty('title', 'Snake');
+    });
+
+    it('get project by id successfully', async () => {
+        (prisma.project.findUnique as jest.Mock).mockResolvedValue(
+            { id: 1, title: 'Snake', shortDescription: 'Jeu Snake', description: 'Un jeu Snake en Angular', thumbnailUrl: null, images: [], stack: ['ANGULAR'], featured: true, order: 1, createdAt: new Date(), updatedAt: new Date() },
+        );
+
+        const project = await ProjectsService.getProjectById( 1);
+
+        expect(project).toHaveProperty('id');
+        expect(project).toHaveProperty('title', 'Snake');
     });
 
     it('update project successfully', async () => {
