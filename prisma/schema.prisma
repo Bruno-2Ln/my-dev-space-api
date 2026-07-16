@@ -21,17 +21,19 @@ model Score {
 }
 
 model Project {
-   id Int           @id @default(autoincrement())
-   title            String
-   shortDescription String
-   description      String
-   thumbnailUrl     String?
-   images           String[]
-   stack            Techno[]
-   featured         Boolean  @default(false)
-   order Int        @default(0)
-   createdAt        DateTime @default(now())
-   updatedAt        DateTime @updatedAt
+   id Int               @id @default(autoincrement())
+   title                String
+   shortDescription     String
+   description          String
+   thumbnailUrl         String?
+   images               String[]
+   stack                Techno[]
+   featured             Boolean  @default(false)
+   order Int            @default(0)
+   galleryVisibility    Boolean @default(false)
+   requiredSkills       String[]
+   createdAt            DateTime @default(now())
+   updatedAt            DateTime @updatedAt
 }
 
 model User {
@@ -52,4 +54,9 @@ NODEJS
 IONIC
 MONGODB
 EXPRESS
+SCSS
+PRISMA
+MONGOOSE
+POSTGRES
+FIGMA
 }
