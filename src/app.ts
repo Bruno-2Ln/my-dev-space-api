@@ -1,4 +1,4 @@
-import express, { Application, Request, Response, NextFunction } from 'express';
+import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { scoresRouter } from './scores/scores.routes';
@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import {authRouter} from "./auth/auth.routes";
 import {projectsRouter} from "./projects/projects.routes";
 import helmet from 'helmet';
+import {skillsRouter} from "./skills/skills.routes";
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use(cookieParser());
 app.use('/api/auth', authRouter);
 app.use('/api/scores', scoresRouter);
 app.use('/api/projects', projectsRouter);
+app.use('/api/skills', skillsRouter);
 
 app.use((_req: Request, res: Response) => {
     res.status(404).json({ message: 'Route not found' });
