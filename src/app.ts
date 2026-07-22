@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { scoresRouter } from './scores/scores.routes';
+import { gamesRouter } from './games/games.routes';
 import { errorMiddleware } from './middleware/error.middleware';
 import cookieParser from "cookie-parser";
 import {authRouter} from "./auth/auth.routes";
@@ -30,6 +31,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/scores', scoresRouter);
 app.use('/api/projects', projectsRouter);
 app.use('/api/skills', skillsRouter);
+app.use('/api/games', gamesRouter);
 
 app.use((_req: Request, res: Response) => {
     res.status(404).json({ message: 'Route not found' });

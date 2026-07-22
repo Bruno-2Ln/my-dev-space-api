@@ -58,6 +58,14 @@ const main = async () => {
         ],
         skipDuplicates: true,
     });
+
+    await prisma.game.createMany({
+        data: [
+            { name: 'snake', label: 'Snake', available: true, order: 1, description: 'Le classique jeu Snake' },
+            { name: 'pong', label: 'Pong', available: false, order: 2, description: 'Le classique jeu Pong' },
+        ],
+        skipDuplicates: true,
+    });
 }
 
 main()

@@ -16,8 +16,20 @@ model Score {
   id         Int      @id @default(autoincrement())
   playerName String
   score      Int
-  gameName   String   @default("snake")
   createdAt  DateTime @default(now())
+  game       Game     @relation(fields: [gameId], references: [id])
+  gameId     Int
+}
+
+model Game {
+    id          Int         @id     @default(autoincrement())
+    name        String      @unique
+    label       String
+    available   Boolean     @default(false)
+    order       Int         @default(0)
+    description String?
+    createdAt   DateTime    @default(now())
+    scores      Score[]
 }
 
 model Project {

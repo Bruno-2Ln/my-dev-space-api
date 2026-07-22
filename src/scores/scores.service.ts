@@ -14,7 +14,10 @@ export const ScoresService = {
 
     getAllByGame(gameName: GameType): Promise<Score[]> {
         return prisma.score.findMany({
-            where: { gameName },
+            where: { game: {
+                    name: gameName
+                } },
+            include: { game: true },
             orderBy: { score: 'desc' },
             take: 10,
         });
@@ -25,7 +28,9 @@ export const ScoresService = {
             data: {
                 playerName,
                 score,
-                gameName,
+                game: {
+                    connect: { name: gameName }
+                }
             },
         });
     },
