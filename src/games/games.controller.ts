@@ -27,20 +27,72 @@ export const getGamesWithScores = async (
     }
 }
 
-export const getGameByNameWithScores = async (
-    _req: Request,
+export const getGameWithScoresByIdentifier = async (req, res, next) => {
+    const { identifier } = req.params;
+    const game = !isNaN(Number(identifier))
+        ? await GamesService.getByIdWithScores(Number(identifier))
+        : await GamesService.getByNameWithScores(identifier);
+
+    if (!game) { res.status(404).json({ message: 'Game not found' }); return; }
+    res.status(200).json(game);
+};
+
+// export const getGameByNameWithScores = async (
+//     _req: Request,
+//     res: Response,
+//     next: NextFunction
+// ): Promise<void> => {
+//     try {
+//         const name = _req.params.name;
+//
+//
+//         res.status(200).json(await GamesService.getByNameWithScores(name));
+//     } catch (e) {
+//         next(e)
+//     }
+// }
+
+export const getGameByIdentifier = async (req, res, next) => {
+    const { identifier } = req.params;
+    const game = !isNaN(Number(identifier))
+        ? await GamesService.getById(Number(identifier))
+        : await GamesService.getByName(identifier);
+
+    if (!game) { res.status(404).json({ message: 'Game not found' }); return; }
+    res.status(200).json(game);
+};
+
+export const getGameById = async (
+    req: Request,
     res: Response,
     next: NextFunction
 ): Promise<void> => {
     try {
-        const name = _req.params.name;
+        const id = Number(req.params.id);
 
+        if (isNaN(id)) {
+            res.status(400).json({ message: 'Id invalide' });
+            return;
+        }
 
-        res.status(200).json(await GamesService.getByINameWithScores(name));
+        res.status(200).json(await GamesService.getById(id));
     } catch (e) {
-        next(e)
+        next(e);
     }
 }
+// export const getGameByIdWithScores = async (
+//     _req: Request,
+//     res: Response,
+//     next: NextFunction
+// ): Promise<void> => {
+//     try {
+//         const id = Number(_req.params.id);
+//         res.status(200).json(await GamesService.getByIdWithScores(id));
+//     } catch (e) {
+//         next(e)
+//     }
+// }
+
 
 export const saveGame = async (
     req: Request,
@@ -61,7 +113,7 @@ export const saveGame = async (
         }
 
 
-        res.status(201).json(await GamesService.save({ name, label, available, description, order }));
+        res.status(201).json(await GamesService.save({ name, label, available, description  }));
     } catch (err) {
         next(err);
     }

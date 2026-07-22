@@ -23,6 +23,17 @@ export const ScoresService = {
         });
     },
 
+    getAllById(id: number): Promise<Score[]> {
+        return prisma.score.findMany({
+            where: { game: {
+                    id
+                } },
+            include: { game: true },
+            orderBy: { score: 'desc' },
+            take: 10,
+        });
+    },
+
     save(playerName: string, score: number, gameName = 'snake'): Promise<Score> {
         return prisma.score.create({
             data: {

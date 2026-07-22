@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import {getScores, getScoresByGame, saveScore, deleteScore} from './scores.controller';
+import {getScores, getScoresByGame, saveScore, deleteScore, getScoresByIdentifier} from './scores.controller';
 import { requireAuth, requireAdmin } from '../auth/auth.middleware';
 
 export const scoresRouter = Router();
 
 scoresRouter.get('/', getScores);
-scoresRouter.get('/:gameName', getScoresByGame);
+scoresRouter.get('/:identifier', getScoresByIdentifier);
 scoresRouter.post('/', saveScore);
 scoresRouter.delete('/:id', requireAuth, requireAdmin, deleteScore);

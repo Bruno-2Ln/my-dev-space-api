@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ScoresService } from './scores.service';
+import {GamesService} from "../games/games.service";
 
 
 
@@ -15,16 +16,15 @@ export const getScores = async (
     }
 };
 
-export const getScoresByGame = async (
-    _req: Request,
-    res: Response,
-    next: NextFunction
-): Promise<void> => {
-    try {
-        res.status(200).json(await ScoresService.getAllByGame(_req.params.gameName));
-    } catch (err) {
-        next(err);
-    }
+
+export const getScoresByIdentifier = async (req: any, res: any, next: any) => {
+    const { identifier } = req.params;
+    const score = !isNaN(Number(identifier))
+        ? await ScoresService.getAllById(Number(identifier))
+        : await ScoresService.getAllByGame(identifier);
+
+    if (!score) { res.status(404).json({ message: 'Score not found' }); return; }
+    res.status(200).json(score);
 };
 
 export const saveScore = async (
