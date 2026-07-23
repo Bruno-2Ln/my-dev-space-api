@@ -5,29 +5,29 @@ export const GamesService = {
     getAllGames(): Promise<Game[]> {
         return prisma.game.findMany({
             orderBy: [
-                { available: 'desc' },
-                { order: 'asc' },
-                { id: 'asc' }
+                {available: 'desc'},
+                {order: 'asc'},
+                {id: 'asc'}
             ]
         });
     },
 
-    save(data: {name: string, label: number, available: boolean, description?: string}): Promise<Game> {
+    save(data: { name: string, label: number, available: boolean, description?: string }): Promise<Game> {
         return prisma.game.create({data});
     },
 
     getById(id: number): Promise<Game | null> {
         return prisma.game.findUnique({
-            where: { id },
+            where: {id},
         });
     },
 
     getByIdWithScores(id: number): Promise<Game | null> {
         return prisma.game.findUnique({
-            where: { id },
+            where: {id},
             include: {
                 scores: {
-                    orderBy: { score: 'desc' },
+                    orderBy: {score: 'desc'},
                     take: 10,
                 },
             },
@@ -43,31 +43,35 @@ export const GamesService = {
 
     deleteById(id: number): Promise<Game> {
         return prisma.game.delete({
-            where: { id },
+            where: {id},
         });
     },
 
     getAllWithScores(): Promise<Game[]> {
         return prisma.game.findMany({
-            include: { scores: true },
+            include: {
+                scores: {
+                    orderBy: {score: 'desc'},
+                },
+            },
             orderBy: [
-                { available: 'desc' },
-                { order: 'asc' }],
+                {available: 'desc'},
+                {order: 'asc'}],
         });
     },
 
     getByName(name: string): Promise<Game | null> {
         return prisma.game.findUnique({
-            where: { name },
+            where: {name},
         });
     },
 
     getByNameWithScores(name: string): Promise<Game | null> {
         return prisma.game.findUnique({
-            where: { name },
+            where: {name},
             include: {
                 scores: {
-                    orderBy: { score: 'desc' },
+                    orderBy: {score: 'desc'},
                     take: 10,
                 },
             },
