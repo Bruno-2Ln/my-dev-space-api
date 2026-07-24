@@ -19,7 +19,7 @@ export const login = async (
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
             maxAge: 2 * 60 * 60 * 1000,
         });
 
@@ -33,7 +33,7 @@ export const logout = (req: Request, res: Response) => {
     res.clearCookie('token', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
     });
     res.status(200).json({ message: 'Déconnexion réussie'});
 };
