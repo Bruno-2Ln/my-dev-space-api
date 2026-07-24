@@ -1,4 +1,4 @@
-import {NextFunction, Response} from "express";
+import {NextFunction, Response, Request} from "express";
 import jwt from "jsonwebtoken";
 
 export interface AuthRequest extends Request {
@@ -7,11 +7,12 @@ export interface AuthRequest extends Request {
 }
 
 export const requireAuth = (
-    req: AuthRequest,
+    req: Request,
     res: Response,
     next: NextFunction
 ): void => {
-    const token = req.cookies?.token;
+    const authReq = req as AuthRequest;
+    const token = authReq.cookies?.token;
 
     if (!token) {
         res.status(401).json({ message: 'Non authentifié'});
@@ -20,7 +21,7 @@ export const requireAuth = (
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: number; role: string };
-        req.user = decoded;
+        authReq.user = decoded;
         next();
     } catch (error) {
         res.status(401).json({ message: 'Toekn invalide ou expiré' });
@@ -32,7 +33,8 @@ export const requireAdmin = (
     res: Response,
     next: NextFunction
 ): void => {
-    if (req.user?.role !== 'ADMIN') {
+    const authReq = req as AuthRequest;
+    if (authReq.user?.role !== 'ADMIN') {
         res.status(403).json({ message: 'Accès refusé' });
         return;
     }

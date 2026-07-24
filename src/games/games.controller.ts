@@ -27,11 +27,11 @@ export const getGamesWithScores = async (
     }
 }
 
-export const getGameWithScoresByIdentifier = async (req, res, next) => {
+export const getGameWithScoresByIdentifier = async (req: Request, res: Response, next: NextFunction) => {
     const { identifier } = req.params;
     const game = !isNaN(Number(identifier))
         ? await GamesService.getByIdWithScores(Number(identifier))
-        : await GamesService.getByNameWithScores(identifier);
+        : await GamesService.getByNameWithScores(identifier as string);
 
     if (!game) { res.status(404).json({ message: 'Game not found' }); return; }
     res.status(200).json(game);
@@ -52,11 +52,11 @@ export const getGameWithScoresByIdentifier = async (req, res, next) => {
 //     }
 // }
 
-export const getGameByIdentifier = async (req, res, next) => {
+export const getGameByIdentifier = async (req: Request, res: Response, next: NextFunction) => {
     const { identifier } = req.params;
     const game = !isNaN(Number(identifier))
         ? await GamesService.getById(Number(identifier))
-        : await GamesService.getByName(identifier);
+        : await GamesService.getByName(identifier as string);
 
     if (!game) { res.status(404).json({ message: 'Game not found' }); return; }
     res.status(200).json(game);

@@ -33,7 +33,7 @@ export const ProjectsService = {
         })
     },
 
-    getProjectById(id: number): Promise<Project> {
+    getProjectById(id: number): Promise<Project | null> {
         return prisma.project.findUnique({
             where: { id }
         })

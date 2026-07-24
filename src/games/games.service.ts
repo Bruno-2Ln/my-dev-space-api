@@ -12,7 +12,7 @@ export const GamesService = {
         });
     },
 
-    save(data: { name: string, label: number, available: boolean, description?: string }): Promise<Game> {
+    save(data: { name: string, label: string, available: boolean, description?: string }): Promise<Game> {
         return prisma.game.create({data});
     },
 

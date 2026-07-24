@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import {SkillsService} from "./skills.service";
-import {Prisma} from '../generated/prisma';
+import {Prisma, SkillType} from '../generated/prisma';
 
 
 export const getSkills = async (

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import {getScores, getScoresByGame, saveScore, deleteScore, getScoresByIdentifier} from './scores.controller';
+import {getScores, saveScore, deleteScore, getScoresByIdentifier} from './scores.controller';
 import { requireAuth, requireAdmin } from '../auth/auth.middleware';
 
 export const scoresRouter = Router();
